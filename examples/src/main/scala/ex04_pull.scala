@@ -2,7 +2,7 @@ import cats.Monoid
 import cats.implicits._
 import fs2._
 
-object ex02_pull extends App {
+object ex04_pull extends App {
 
   def sumOperator[F[_], A: Monoid](range: Int): Pipe[F, A, A] = { in =>
 
@@ -24,7 +24,7 @@ object ex02_pull extends App {
       }
     }
 
-    go(in, 0, Monoid[A].empty).stream
+    go(in, 0, Monoid[A].empty).streamNoScope
   }
 
   Stream
