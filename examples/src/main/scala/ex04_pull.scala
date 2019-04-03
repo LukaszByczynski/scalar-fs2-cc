@@ -4,31 +4,21 @@ import fs2._
 
 object ex04_pull extends App {
 
-  def sumOperator[F[_], A: Monoid](range: Int): Pipe[F, A, A] = { in =>
-
-    def go(stream: Stream[F, A], counter: Int, sum: A): Pull[F, A, Unit] = {
-      stream.pull.unconsLimit(100).flatMap {
+  def sumOperator[F[_], A: Monoid](windowSize: Int): Pipe[F, A, A] = { in =>
+    def go(stream: Stream[F, A]): Pull[F, A, Unit] = {
+      stream.pull.unconsN(windowSize, allowFewer = true).flatMap {
         case Some((chunk, tailStream)) =>
-          val newCounter = counter + chunk.size
-          if (newCounter < range)
-            go(tailStream, newCounter, chunk.foldLeft(sum)(_ |+| _))
-          else {
-            val n = newCounter - range
-            val outputSum = chunk.take(n).foldLeft(sum)(_ |+| _)
-
-            Pull.output1(outputSum) >> go(Stream.chunk(chunk.drop(n)) ++ tailStream, 0, Monoid[A].empty)
-          }
-
+          Pull.output1(chunk.foldLeft(Monoid[A].empty)(_ |+| _)) >> go(tailStream)
         case None =>
-          Pull.output1(sum) >> Pull.done
+          Pull.done
       }
     }
 
-    go(in, 0, Monoid[A].empty).streamNoScope
+    go(in).stream
   }
 
   Stream
-    .range(1, 100000)
+    .range(1, 10)
     .through(sumOperator(4))
     .compile
     .toList
