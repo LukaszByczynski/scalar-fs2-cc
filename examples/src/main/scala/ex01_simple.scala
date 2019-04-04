@@ -3,6 +3,8 @@ import scala.util.Random
 import fs2._
 import cats.effect.IO
 
+import scala.concurrent.duration._
+
 object ex01_simple extends App {
 
   val list = Stream(1, 2, 3).compile.toList
@@ -25,7 +27,8 @@ object ex01_simple extends App {
   println(zipped)
 
   val unfoldWitEvalMap = Stream
-    .unfold(1)(prev => if (prev == 5) None else Some((prev, prev + 1)))
+    .duration[IO]
+    .take(4)
     .evalMap(i => IO(println(i)))
     // .flatMap(i => Stream.eval(IO(println(i))))
     .compile
