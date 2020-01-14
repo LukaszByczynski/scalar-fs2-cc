@@ -1,7 +1,7 @@
 import mill._, scalalib._, scalafmt._
 
 object examples extends SbtModule with ScalafmtModule {
-  def scalaVersion = "2.12.8"
+  def scalaVersion = "2.12.10"
 
   override def scalacOptions = Seq(
     "-deprecation",

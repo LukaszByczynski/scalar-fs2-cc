@@ -10,11 +10,11 @@ object ex01_simple extends App {
   val list = Stream(1, 2, 3).compile.toList
   println(list)
 
-  val range = Stream.eval(IO(Random.nextInt())).compile.lastOrError
-  println(range.unsafeRunSync())
+  val randomEval = Stream.eval(IO(Random.nextInt())).compile.lastOrError
+  println(randomEval.unsafeRunSync())
 
-  val rangeRepeted = Stream.repeatEval(IO(Random.nextInt())).take(4).compile.toList
-  println(rangeRepeted.unsafeRunSync())
+  val randomEvalRepeated = Stream.repeatEval(IO(Random.nextInt())).take(4).compile.toList
+  println(randomEvalRepeated.unsafeRunSync())
 
   val composed = Stream.range(1, 4) ++ Stream("a", "b", "c")
   println(composed.compile.toList)
@@ -30,7 +30,7 @@ object ex01_simple extends App {
     .duration[IO]
     .take(4)
     .evalMap(i => IO(println(i)))
-    // .flatMap(i => Stream.eval(IO(println(i))))
+     .flatMap(i => Stream.eval(IO(println(i))))
     .compile
     .drain
   unfoldWitEvalMap.unsafeRunSync()

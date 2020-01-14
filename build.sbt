@@ -2,7 +2,7 @@ val examples = project
   .settings(
     name := "scalar-fs2-cc",
     version := "1.0.0",
-    scalaVersion := "2.12.8",
+    scalaVersion := "2.12.10",
     scalacOptions := Seq(
       "-deprecation",
       "-encoding",
@@ -14,10 +14,10 @@ val examples = project
       "-Ypartial-unification"
     ),
     libraryDependencies ++= {
-      val fs2Version = "1.0.4"
-      val http4sVersion = "0.19.0"
-      val circeVersion = "0.11.1"
-      val doobieVersion = "0.6.0"
+      val fs2Version = "2.1.0"
+      val http4sVersion = "0.20.15"
+      val circeVersion = "0.12.3"
+      val doobieVersion = "0.8.6"
 
       Seq(
         "co.fs2" %% "fs2-core" % fs2Version,
@@ -25,7 +25,7 @@ val examples = project
         "org.tpolecat" %% "doobie-core" % doobieVersion,
         "org.tpolecat" %% "doobie-h2" % doobieVersion,
         "org.tpolecat" %% "doobie-hikari" % doobieVersion,
-        "com.h2database" % "h2" % "1.4.197",
+        "com.h2database" % "h2" % "1.4.200",
         "org.http4s" %% "http4s-blaze-server" % http4sVersion,
         "org.http4s" %% "http4s-circe" % http4sVersion,
         "org.http4s" %% "http4s-dsl" % http4sVersion,
